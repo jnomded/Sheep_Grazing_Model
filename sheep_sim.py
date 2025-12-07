@@ -54,6 +54,67 @@ def run_simulation(params, record_frames=False, max_frames=None):
     # Initialize pygame
     pygame.init()
 
+    if record_frames:
+        screen = pygame.Surface((window_size, window_size))
+    else:
+        screen = pygame.display.set_mode((window_size, window_size))
+        pygame.display.set_caption(f"Sheep Sim (1D model) | Speed: {sim_speed}x")
+    
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont("Arial", 24)
+
+    # Initialize state
+    P = P0
+    current_response = response_mode
+    frozen = False
+    malnourished = False
+    grazing_frac = 1.0
+    current_time = 0.0
+    
+    # Initialize pixel grid where each pixel has its own saturation (0.0 to 1.0)
+    initial_saturation = P0 / K
+    pixel_grid = np.full((pasture_size, pasture_size), initial_saturation, dtype=np.float64)
+    total_pixels = pasture_size * pasture_size
+    
+    #sheep for visualization 
+    sheep_list = [
+        Sheep(random.randint(0, pasture_size - 1),
+              random.randint(0, pasture_size - 1))
+        for _ in range(H0)
+    ]
+    
+    frames = []
+    running = True
+    frame_count = 0
+    
+
+
+    #Distinc patch palettes for each saturation level of the pixels
+    PALETTE = np.array([
+        [101,  67,  33],  # 0: Very bare dirt
+        [124,  80,  34],  # 1: Sparse dry
+        [139, 100,  35],  # 2: Very dry
+        [160, 130,  40],  # 3: Dry-medium
+        [180, 160,  50],  # 4: Dry (yellow-green)
+        [170, 180,  55],  # 5: Medium-dry light
+        [154, 205,  50],  # 6: Medium-dry
+        [130, 175,  45],  # 7: Medium
+        [120, 160,  40],  # 8: Medium-green
+        [107, 142,  35],  # 9: Medium-lush
+        [80,  130,  35],  # 10: Lush-medium
+        [60,  120,  34],  # 11: Lush-dark
+        [34,  139,  34],  # 12: Lush
+        [0,   120,   0],  # 13: Very lush (lighter)
+        [0,   110,   0],  # 14: Very lush dark
+    ], dtype=np.uint8)
+    
+    # Threshold boundaries between the 7 states
+    THRESHOLDS = [
+    0.05, 0.10, 0.15, 0.20,
+    0.30, 0.40, 0.50, 0.60,
+    0.65, 0.70, 0.75, 0.80,
+    0.85, 0.90
+    ]
 
 def main():
     run_simulation(get_all_params(), record_frames=False)

@@ -90,7 +90,7 @@ def main():
     sim_path = os.path.join(output_dir, f"simulation{suffix}.gif")
     generate_simulation_gif(params, sim_path)
 
-    print("\nDone!")
+    print("\nFinished!")
 
 
 if __name__ == "__main__":

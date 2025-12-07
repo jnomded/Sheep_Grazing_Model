@@ -29,10 +29,17 @@ def get_model_params(config):
 def get_scenario_params(config):
     """Extract scenario parameters from the configuration dictionary."""
     scenario = config["scenario"]
+    model = config["model"]
+    
+    # Calculate initial biomass from fraction
+    initial_p_frac = float(scenario["INITIAL_P_FRAC"])
+    initial_p = initial_p_frac * float(model["K_CAPACITY"])
+    
     return {
-        "INITIAL_BIOMASS": float(scenario["INITIAL_BIOMASS"]),
-        "TIME_STEP": float(scenario["TIME_STEP"]),
-        "TOTAL_TIME": float(scenario["TOTAL_TIME"]),
+        "H0": int(scenario["H0"]),
+        "INITIAL_P": initial_p,
+        "DT": float(scenario["DT"]),
+        "T_MAX": float(scenario["T_MAX"]),
     }
 
 def get_sustainability_params(config):

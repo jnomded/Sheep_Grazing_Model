@@ -1,0 +1,34 @@
+# config file accoriding to formula described in the paper
+
+model:
+  K_CAPACITY: 100.0      # K - carrying capacity
+  GROWTH_RATE: 0.1       # r - intrinsic growth rate
+  A_CONST: 1.0           # a - saturation constant
+  B_CONST: 10.0          # b - half-saturation constant
+  response_mode: 2      # 1 for c1 (Type I), 2 for c2 (Type II)
+
+
+#sheep scenarios
+
+scenario:
+  H0: 4                  # grazing pressure (sheep)
+  INITIAL_P_FRAC: .015   # initial biomass as fraction of K 
+  DT: 0.1                # time step 
+  T_MAX: 300         # max time, sim will stop at T_MAX or when P reaches 0
+
+# when can the sheep starve
+sustainability:
+  MALNOURISH_FRAC: 0.75  # fraction of saturation constant below which sheep are malnourished
+  freeze_on_unsustainable: true  # stop when they die
+
+#Randomness
+randomness:
+  seed: 42
+
+
+# Visualization Settings
+visualization:
+  WINDOW_SIZE: 800       # pixel size of window
+  PASTURE_SIZE: 50       # grid size for visual display
+  FPS: 30                # frames per second
+  SIM_SPEED: 10          # ODE steps we render per frame

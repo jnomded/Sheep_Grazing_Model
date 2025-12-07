@@ -29,7 +29,7 @@ def compute_dPdt(P, H0, r, K, a, b, response_type):
     cP = functional_response(P, a, b, response_type)
     return r * P * (1.0 - P / K) - H0 * cP
 
-def step_eueler(P, H0, r, K, a, b, response_type, dt):
+def step_euler(P, H0, r, K, a, b, response_type, dt):
     """
     Take one time step using the Euler method.
     

@@ -83,7 +83,7 @@ def main():
 
     response_mode = params["response_mode"]
     h0 = params["H0"]
-    initial_p_frac = params.get("INITIAL_P_FRAC", None)
+    initial_p_frac = params.get("INITIAL_P")
     suffix = f"_c{response_mode}_H{h0}_P{initial_p_frac}"  
 
 

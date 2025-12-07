@@ -154,7 +154,7 @@ def run_simulation(params, record_frames=False, max_frames=None):
             # Only update biomass and move sheep if not frozen
             if not frozen:
                 P_old = P
-                P = step_euler(P, H0, K, r, a, b, current_response, dt)
+                P = step_euler(P, H0, r, K, a, b, current_response, dt)
                 
                 delta_P_frac = (P - P_old) / K
                 

@@ -11,8 +11,8 @@ model:
 #sheep scenarios
 
 scenario:
-  H0: 2                  # grazing pressure (sheep)
-  INITIAL_P_FRAC: .015   # initial biomass as fraction of K 
+  H0: 3                  # grazing pressure (sheep)
+  INITIAL_P_FRAC: .80   # initial biomass as fraction of K 
   DT: 0.1                # time step 
   T_MAX: 300         # max time, sim will stop at T_MAX or when P reaches 0
 

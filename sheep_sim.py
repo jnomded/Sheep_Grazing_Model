@@ -19,10 +19,59 @@ class Sheep:
         self.x = x
         self.y = y
 
-    def move(self, grid_size):
-        """Random walk movement."""
-        moves = [(0, 1), (0, -1), (1, 0), (-1, 0), (0, 0)]
-        dx, dy = random.choice(moves)
+    def move(self, grid_size, pixel_grid, prefer_greener=True):
+        """Biased random walk.
+
+        If ``prefer_greener`` is True, the sheep will tend to move toward
+        neighboring cells with higher saturation (more grass) and avoid
+        very bare patches, while still keeping some randomness.
+        """
+        # 4-neighborhood + stay put
+        candidate_moves = [(0, 0), (0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        weights = []
+        current_val = pixel_grid[self.x, self.y]
+
+        for dx, dy in candidate_moves:
+            nx = max(0, min(grid_size - 1, self.x + dx))
+            ny = max(0, min(grid_size - 1, self.y + dy))
+
+            neighbor_val = pixel_grid[nx, ny]
+
+            if prefer_greener:
+                # Base weight so every direction is possible
+                base = 0.1
+
+                # Prefer greener-than-current patches, mildly avoid barer ones
+                delta = neighbor_val - current_val
+
+                # Positive delta gets stronger preference, negative is damped
+                if delta >= 0:
+                    bias = 1.0 + 3.0 * delta  # up to ~4x for much greener
+                else:
+                    bias = 1.0 + 1.0 * delta  # slightly reduced for barer
+
+                # Also avoid truly bare ground a bit extra
+                bare_penalty = 0.5 if neighbor_val < 0.05 else 1.0
+
+                w = max(1e-3, base * bias * bare_penalty)
+            else:
+                # Pure random walk
+                w = 1.0
+
+            weights.append(w)
+
+        # Normalize and sample a move according to weights
+        weights = np.array(weights, dtype=np.float64)
+        total_w = weights.sum()
+        if total_w <= 0:
+            # Fallback to staying put if something goes wrong
+            dx, dy = (0, 0)
+        else:
+            probs = weights / total_w
+            idx = np.random.choice(len(candidate_moves), p=probs)
+            dx, dy = candidate_moves[idx]
+
         self.x = max(0, min(grid_size - 1, self.x + dx))
         self.y = max(0, min(grid_size - 1, self.y + dy))
 
@@ -250,9 +299,9 @@ def run_simulation(params, record_frames=False, max_frames=None):
                             remaining -= local_target
                             patches_done += 1
                 
-                # Move sheep
+                # Move sheep with bias toward greener patches
                 for sheep in sheep_list:
-                    sheep.move(pasture_size)
+                    sheep.move(pasture_size, pixel_grid)
             
             current_time += dt
         

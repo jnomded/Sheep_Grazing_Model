@@ -34,7 +34,7 @@ After setting `config.yaml`, you can run
 The underlying model is a single ordinary differential equation for pasture biomass $P(t)$ grazed by a herd of fixed size $H_0$:
 
 $$
-\frac{dP}{dt} = r P \left(1 - \frac{P}{K} \right) - H_0 \; c(P),
+\frac{dP}{dt} = r P \left(1 - \frac{P}{K} \right) - H_0 \ c(P),
 $$
 
 where:

@@ -79,11 +79,4 @@ with time step $\Delta t = \texttt{DT}$ set in `config.yaml`.
 - `sheep_sim.py` – Pygame visualization and main simulation loop.
 - `config_loader.py` / `config.yaml` – Parameter loading and defaults (growth, capacity, herd size, etc.).
 - `generate_gifs.py` – Runs simulations, captures frames, and writes GIFs into `output/`.
-- `output/` – Saved GIFs and optionally raw frame dumps.
-
-
-
-
-## License / reuse
-
-This project is intended as a teaching and experimentation tool for introductory mathematical modeling and differential equations. Feel free to fork it, tweak parameters, or repurpose the visualization for your own ODE demos.
+- `output/` – Saved GIFs 
